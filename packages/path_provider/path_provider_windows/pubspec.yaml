@@ -17,12 +17,7 @@ dependencies:
   flutter:
     sdk: flutter
   ffi: ^1.0.0
-  win32:
-    git:
-      url: https://github.com/timsneath/win32.git
-      ref: clarkezone
-
-publish_to: none
+  win32: ^2.0.0
 
 dev_dependencies:
   flutter_test:
