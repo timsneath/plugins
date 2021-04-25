@@ -17,7 +17,10 @@ dependencies:
   flutter:
     sdk: flutter
   ffi: ^1.0.0
-  win32: ^2.0.0
+  win32:
+    git: https://github.com/timsneath/win32.git
+
+publish_to: none
 
 dev_dependencies:
   flutter_test:

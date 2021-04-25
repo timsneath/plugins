@@ -90,7 +90,7 @@ class PathProviderWindows extends PathProviderPlatform {
   @override
   Future<String?> getApplicationSupportPath() async {
     String appDataRoot = '';
-    if (isAppConatiner()) {
+    if (isAppContainer()) {
       appDataRoot = getRoamingAppDataPathWinUWP();
     } else {
       appDataRoot = await getPathWin32(WindowsKnownFolder.RoamingAppData);
