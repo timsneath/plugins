@@ -11,6 +11,7 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:win32/win32.dart';
 
+import 'appcontainer.dart';
 import 'folders.dart';
 
 /// Wraps the Win32 VerQueryValue API call.
@@ -88,7 +89,13 @@ class PathProviderWindows extends PathProviderPlatform {
 
   @override
   Future<String?> getApplicationSupportPath() async {
-    final String appDataRoot = await getPath(WindowsKnownFolder.RoamingAppData);
+    String appDataRoot = '';
+    if (isAppConatiner()) {
+      appDataRoot = getRoamingAppDataPathWinUWP();
+    } else {
+      appDataRoot = await getPathWin32(WindowsKnownFolder.RoamingAppData);
+    }
+
     final Directory directory = Directory(
         path.join(appDataRoot, _getApplicationSpecificSubdirectory()));
     // Ensure that the directory exists if possible, since it will on other
@@ -105,16 +112,17 @@ class PathProviderWindows extends PathProviderPlatform {
 
   @override
   Future<String?> getApplicationDocumentsPath() =>
-      getPath(WindowsKnownFolder.Documents);
+      getPathWin32(WindowsKnownFolder.Documents);
 
   @override
-  Future<String?> getDownloadsPath() => getPath(WindowsKnownFolder.Downloads);
+  Future<String?> getDownloadsPath() =>
+      getPathWin32(WindowsKnownFolder.Downloads);
 
   /// Retrieve any known folder from Windows.
   ///
   /// folderID is a GUID that represents a specific known folder ID, drawn from
   /// [WindowsKnownFolder].
-  Future<String> getPath(String folderID) {
+  Future<String> getPathWin32(String folderID) {
     final Pointer<Pointer<Utf16>> pathPtrPtr = calloc<Pointer<Utf16>>();
     final Pointer<GUID> knownFolderID = calloc<GUID>()..ref.setGUID(folderID);
 
