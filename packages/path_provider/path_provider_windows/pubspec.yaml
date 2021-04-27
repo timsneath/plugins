@@ -18,8 +18,9 @@ dependencies:
     sdk: flutter
   ffi: ^1.0.0
   win32:
-    git: https://github.com/timsneath/win32.git
-    branch: appdata
+    git:
+      url: https://github.com/timsneath/win32.git
+      ref: appdata
 
 publish_to: none
 
