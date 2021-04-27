@@ -19,6 +19,7 @@ dependencies:
   ffi: ^1.0.0
   win32:
     git: https://github.com/timsneath/win32.git
+    branch: appdata
 
 publish_to: none
 

@@ -33,14 +33,15 @@ bool isAppContainer() {
 }
 
 String getRoamingAppDataPathWinUWP() {
-  //RoInitialize should have already been done in the c++ runner
-  //var hr = RoInitialize(RO_INIT_TYPE.RO_INIT_SINGLETHREADED);
-  OutputDebugString(
-      '${!isAppContainer() ? '!' : ''}isAppContainer'.toNativeUtf16());
+  final currAppData = ApplicationData.Current;
+  final localFolder = currAppData.LocalFolder;
+  final storageItem = IStorageItem(localFolder.cast());
+  final hPath = storageItem.Path;
 
-  final userData = UserDataPaths.GetDefault();
-  final hstrRoamingAppData = userData.RoamingAppData;
+  final path = WindowsGetStringRawBuffer(hPath, nullptr).toDartString();
 
-  return WindowsGetStringRawBuffer(hstrRoamingAppData, nullptr).toDartString();
+  print('Local folder path: $path');
+
+  return path;
   //RoUninitialize();
 }
