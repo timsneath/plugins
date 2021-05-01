@@ -33,9 +33,19 @@ bool isAppContainer() {
 }
 
 String getRoamingAppDataPathWinUWP() {
+  final pObj = calloc<COMObject>();
+  final pIID_IApplicationData = calloc<GUID>()
+    ..ref.setGUID(IID_IApplicationData);
   final currAppData = ApplicationData.Current;
-  final localFolder = currAppData.LocalFolder;
-  final storageItem = IStorageItem(localFolder.cast());
+  currAppData.QueryInterface(pIID_IApplicationData, pObj.cast());
+  final pAppData = IApplicationData(pObj);
+
+  final pObj2 = calloc<COMObject>();
+  final pIID_IStorageItem = calloc<GUID>()..ref.setGUID(IID_IStorageItem);
+  final localFolder = IUnknown(pAppData.LocalFolder.cast());
+  localFolder.QueryInterface(pIID_IStorageItem, pObj2.cast());
+
+  final storageItem = IStorageItem(pObj2.cast());
   final hPath = storageItem.Path;
 
   final path = WindowsGetStringRawBuffer(hPath, nullptr).toDartString();
